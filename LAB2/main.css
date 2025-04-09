@@ -57,7 +57,7 @@ main {
     gap: 20px;
 }
 
-.signup input, .cancel input {
+.submit input, .cancel input {
     text-align: center;
     background-color: #21bd4b;
     padding: 10px;
