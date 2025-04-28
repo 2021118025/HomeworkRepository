@@ -71,13 +71,15 @@
 }
 .container {
     display: flex; /* img: horizontal*/
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 22%;
     flex-direction: row;
     gap: 15px;
     border: 1px solid black;
     margin: 5px;
     padding: 5px;
     height: 300px;
-    width: 23%;
 }
 .container img {
     width: 80px;
@@ -85,7 +87,6 @@
 
 .img-wrap {
     position: relative;
-    width: 80px;
     transition: transform 2s;
 }
 .movie-title {
@@ -129,14 +130,36 @@
 /* media */
 @media(min-width: 481px) and (max-width: 800px) {
     .nav { flex-direction: column;  align-items: center; }
-    .container-wrap { flex-wrap: wrap; }
-    .container {width: 20%; }
+    .article-txt {text-align: center; }
+    .container-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; }
+    .container {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 45%;
+        flex-direction: row; }
+    .content{
+        column-count: 1;
+        column-rule: none; }
 }
 @media(max-width: 480px) {
+    .header{ text-align: center; }
+    .article-txt {text-align: center; }
     .nav { flex-direction: column; align-items: center; }
-    .container-wrap { flex-wrap: wrap;}
-    .container {width: 100%; flex-direction: column; }
-
+    .container-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;}
+    .container {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 65%;
+        flex-direction: column; }
+    .content{
+            column-count: 1;
+            column-rule: none; }
 }
 
 
@@ -147,7 +170,6 @@ h1 {
     text-align: center;
 }
 main {
-    justify-content: center;
     margin-top: 30px;
 }
 .form-box {
