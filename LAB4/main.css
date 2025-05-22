@@ -1,0 +1,227 @@
+@charset "UTF-8";
+
+/* index.html */
+/* header */
+#wrap {
+    width: 1020px;
+    margin: 0 auto;
+}
+.header {
+    overflow: hidden;
+    border-bottom: 2px solid black;
+    padding-bottom: 10px;
+}
+.header-txt {
+    padding: 10px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    animation-name: slide-header;
+    animation-duration: 2s;
+    animation-timing-function: ease-out;
+    display: inline-block;
+}
+@keyframes slide-header{
+    0% { transform: translateX(1020px); }
+    100% { transform: translateX(0px); }
+}
+/* nav */
+.nav {
+    padding: 10px;
+    display: flex;
+    flex-direction: row; /* nav a: horizontal */
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 20px;
+}
+.nav a {
+    text-decoration: none;
+    font-size: 15px;
+    color: black;
+    margin: 0 10px;
+    padding: 5px 0;
+}
+.nav a.active {
+    border-top: 2px solid red;
+    border-bottom: 2px solid red;
+}
+
+/* main */
+.main {
+    display: flex;
+    flex-direction: column; /* Movies & About: vertical*/
+}
+.article-txt {
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    border-bottom: 1px solid black;
+    padding: 10px;
+    margin-top: 15px;
+}
+/* movies */
+.movies {
+    display: flex;
+    flex-direction: column; /* article-txt & contaeinr-wrap: vertical*/
+}
+.container-wrap {
+    display: flex;
+    flex-direction: row; /* container: horizontal*/
+    margin: 15px;
+}
+.container {
+    display: flex; /* img: horizontal*/
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 22%;
+    flex-direction: row;
+    gap: 15px;
+    border: 1px solid black;
+    margin: 5px;
+    padding: 5px;
+    height: 300px;
+}
+.container img {
+    width: 80px;
+}
+
+.img-wrap {
+    position: relative;
+    transition: transform 2s;
+}
+.movie-title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.img-wrap:hover .movie-title {
+    opacity: 1;
+}
+.img-wrap:hover {
+    transform: scale(1.5);
+}
+
+/* about */
+.about {
+    display: flex;
+    flex-direction: column; /* article-txt & content: vertical*/
+}
+.content {
+    column-count: 2;
+    column-gap: 40px;
+    column-rule: 1px solid black;
+    padding: 20px;
+    font-size: 15px;
+    text-align: justify;
+}
+
+/* media */
+@media(min-width: 481px) and (max-width: 800px) {
+    .nav { flex-direction: column;  align-items: center; }
+    .article-txt {text-align: center; }
+    .container-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; }
+    .container {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 45%;
+        flex-direction: row; }
+    .content{
+        column-count: 1;
+        column-rule: none; }
+}
+@media(max-width: 480px) {
+    .header{ text-align: center; }
+    .article-txt {text-align: center; }
+    .nav { flex-direction: column; align-items: center; }
+    .container-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;}
+    .container {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 65%;
+        flex-direction: column; }
+    .content{
+            column-count: 1;
+            column-rule: none; }
+}
+
+
+/* login, signup */
+h1 {
+    font-family:Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    text-align: center;
+}
+main {
+    margin-top: 30px;
+}
+.form-box {
+    margin: 0 auto;
+    border: 2px solid #000000;
+    padding: 30px;
+    width: 400px;
+}
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.form-row label {
+    width: 100px;
+    font-weight: bold;
+    text-align: left;
+}
+.form-row input, .form-row select {
+    flex: 1;
+    height: 30px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+.radio-group {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    gap: 10px;
+}
+.radio-space{
+    width: 60px;
+}
+#button {
+    display: flex;
+    margin-top: 20px;
+    gap: 20px;
+}
+.submit input, .cancel input {
+    text-align: center;
+    padding: 10px;
+    width: 80px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+.submit input{
+    background-color: #21bd4b;
+    color: #2e2e2e;
+}
+.cancel input {
+    background-color: #ff0000;
+    color: #ffffff;
+}
