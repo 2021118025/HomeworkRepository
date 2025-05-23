@@ -1,127 +1,140 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang = "ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset = "UTF-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
     <title>메인페이지</title>
-    <link rel="stylesheet" type = "text/css" href="main.css">
+    <link rel = "stylesheet" type = "text/css" href = "main.css">
 </head>
 
 <body>
-  <div id="wrap">
-    <header class="header">
-      <div class="header-txt">인프밍 영화 정보 사이트입니다.</div>
-      <nav class="nav">
-        <a href="index.html" class="active">메인페이지</a>
-        <a href="login.html">로그인</a>
-        <a href="signup.html">회원가입</a>
+  <div id = "wrap">
+    <header class = "header">
+      <div class = "header-txt">인프밍 영화 정보 사이트입니다.</div>
+      <nav class = "nav">
+        <a href = "index.html" class = "active">메인페이지</a>
+        <a href = "login.html">로그인</a>
+        <a href = "signup.html">회원가입</a>
       </nav>
     </header>
 
-    <main class="main">
-      <div id="filtering">
-        <input type="text" id="search" placeholder="키워드를 입력하세요" />
-        <button id="btn">Filter results</button>
+    <main class = "main">
+      <div id = "filtering">
+        <input type = "text" id = "search" placeholder = "키워드를 입력하세요" />
+        <button id = "btn">Filter results</button>
       </div>
 
-      <div class="article-txt">Movies</div>
+      <div class = "article-txt">Movies</div>
 
-      <section class="movie-section">
+      <section class = "movie-section">
         
-        <div class="sort-panel">
+        <div class = "sort-panel">
           <div><strong>정렬 기준</strong></div>
-          <label><input type="radio" name="sort" value="rating-desc"> 평점 내림차순</label><br>
-          <label><input type="radio" name="sort" value="rating-asc"> 평점 오름차순</label><br>
-          <label><input type="radio" name="sort" value="date-desc"> 개봉 내림차순</label><br>
-          <label><input type="radio" name="sort" value="date-asc"> 개봉 오름차순</label>
+          <label><input type = "radio" name = "sort" value = "rating-desc"> 평점 내림차순</label><br>
+          <label><input type = "radio" name = "sort" value = "rating-asc"> 평점 오름차순</label><br>
+          <label><input type = "radio" name = "sort" value = "date-desc"> 개봉 내림차순</label><br>
+          <label><input type = "radio" name = "sort" value = "date-asc"> 개봉 오름차순</label>
         </div>
 
-        <div class="movie-grid" id="movie-grid"></div>
+        <div class = "movie-grid" id = "movie-grid"></div>
       </section>
     </main>
   </div>
-
 <script>
-const movieGrid = document.getElementById("movie-grid");
-const searchInput = document.getElementById("search");
-const filterBtn = document.getElementById("btn");
-let movieData = [];
+  const movieGrid = document.getElementById("movie-grid");
+  const searchInput = document.getElementById("search");
+  const filterBtn = document.getElementById("btn");
 
-fetch("product.json")
-  .then(response => response.json())
-  .then(data => {
-    movieData = data.slice(0, 20).map(movie => ({
-      title: movie.original_title,
-      date: movie.release_date,
-      rating: parseFloat(movie.vote_average),
-      img: movie.poster_path,
-      overview: movie.overview
-    }));
+  let allMovies = [];
+  let renderedCount = 0;
+  const batchSize = 8;
 
-    renderMovies(movieData);  // 초기 렌더링
-  });
+  function renderNextBatch(data) {
+    const nextBatch = data.slice(renderedCount, renderedCount + batchSize);
 
-function renderMovies(data) {
-  movieGrid.innerHTML = "";
-  data.forEach(movie => {
-    const card = document.createElement("div");
-    card.className = "movie-card";
-    card.innerHTML = `
-      <div class="poster-wrap">
-        <img src="${movie.img}" alt="${movie.title}">
-        <div class="overlay"><strong>줄거리:</strong><br>${movie.overview}</div>
-      </div>
-      <div class="movie-title">${movie.title}</div>
-      <div class="movie-date">📅 ${movie.date}</div>
-      <div class="movie-rating">⭐ ${movie.rating}/10</div>
-    `;
-    movieGrid.appendChild(card);
-  });
-}
+    nextBatch.forEach(movie => {
+      const card = document.createElement("div");
+      card.className = "movie-card";
+      card.innerHTML = `
+        <div class="poster-wrap">
+          <img src="${movie.img}" alt="${movie.title}">
+          <div class="overlay"><strong>줄거리:</strong><br>${movie.overview}</div>
+        </div>
+        <div class="movie-title">${movie.title}</div>
+        <div class="movie-date">📅 ${movie.date}</div>
+        <div class="movie-rating">⭐ ${movie.rating}/10</div>
+      `;
+      movieGrid.appendChild(card);
+    });
 
-function sortMovies(data, type) {
-  const sorted = [...data];
-  switch (type) {
-    case "rating-desc":
-      sorted.sort((a, b) => b.rating - a.rating); break;
-    case "rating-asc":
-      sorted.sort((a, b) => a.rating - b.rating); break;
-    case "date-desc":
-      sorted.sort((a, b) => new Date(b.date) - new Date(a.date)); break;
-    case "date-asc":
-      sorted.sort((a, b) => new Date(a.date) - new Date(b.date)); break;
-  }
-  return sorted;
-}
-
-filterBtn.addEventListener("click", () => {
-  const keyword = searchInput.value.trim().toLowerCase();
-  const selectedSortInput = document.querySelector('input[name="sort"]:checked');
-
-  let filtered = movieData.filter(movie =>
-    movie.title.toLowerCase().includes(keyword)
-  );
-
-  if (selectedSortInput) {
-    const selectedSort = selectedSortInput.value;
-    filtered = sortMovies(filtered, selectedSort);
+    renderedCount += batchSize;
   }
 
-  renderMovies(filtered);
-});
+  window.addEventListener("scroll", () => {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
+      renderNextBatch(allMovies);
+    }
+  });
 
-document.querySelectorAll('input[name="sort"]').forEach(input => {
-  input.addEventListener("change", () => {
+  fetch("product.json")
+    .then(res => res.json())
+    .then(data => {
+      allMovies = data.map(movie => ({
+        title: movie.original_title,
+        date: movie.release_date,
+        rating: parseFloat(movie.vote_average),
+        img: movie.poster_path,
+        overview: movie.overview
+      }));
+
+      renderNextBatch(allMovies);
+    });
+
+  filterBtn.addEventListener("click", () => {
     const keyword = searchInput.value.trim().toLowerCase();
-    const filtered = movieData.filter(movie =>
+    const selectedSortInput = document.querySelector('input[name="sort"]:checked');
+
+    let filtered = allMovies.filter(movie =>
       movie.title.toLowerCase().includes(keyword)
     );
-    const sorted = sortMovies(filtered, input.value);
-    renderMovies(sorted);
-  });
-});
 
+    if (selectedSortInput) {
+      const selectedSort = selectedSortInput.value;
+      filtered = sortMovies(filtered, selectedSort);
+    }
+
+    movieGrid.innerHTML = "";
+    renderedCount = 0;
+    allMovies = filtered;
+    renderNextBatch(allMovies);
+  });
+
+  document.querySelectorAll('input[name="sort"]').forEach(input => {
+    input.addEventListener("change", () => {
+      const keyword = searchInput.value.trim().toLowerCase();
+      const filtered = allMovies.filter(movie =>
+        movie.title.toLowerCase().includes(keyword)
+      );
+      const sorted = sortMovies(filtered, input.value);
+      movieGrid.innerHTML = "";
+      renderedCount = 0;
+      allMovies = sorted;
+      renderNextBatch(allMovies);
+    });
+  });
+
+  function sortMovies(data, type) {
+    const sorted = [...data];
+    switch (type) {
+      case "rating-desc": sorted.sort((a, b) => b.rating - a.rating); break;
+      case "rating-asc": sorted.sort((a, b) => a.rating - b.rating); break;
+      case "date-desc": sorted.sort((a, b) => new Date(b.date) - new Date(a.date)); break;
+      case "date-asc": sorted.sort((a, b) => new Date(a.date) - new Date(b.date)); break;
+    }
+    return sorted;
+  }
 </script>
+
 
 
 </body>
