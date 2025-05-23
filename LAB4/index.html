@@ -40,12 +40,13 @@
       </section>
     </main>
   </div>
-<script>
+  <script>
   const movieGrid = document.getElementById("movie-grid");
   const searchInput = document.getElementById("search");
   const filterBtn = document.getElementById("btn");
 
-  let allMovies = [];
+  let allMovies = [];         // 전체 데이터 (절대 덮어쓰지 않음)
+  let displayedMovies = [];   // 현재 화면에 보여지는 데이터
   let renderedCount = 0;
   const batchSize = 8;
 
@@ -72,7 +73,7 @@
 
   window.addEventListener("scroll", () => {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
-      renderNextBatch(allMovies);
+      renderNextBatch(displayedMovies);
     }
   });
 
@@ -87,39 +88,41 @@
         overview: movie.overview
       }));
 
-      renderNextBatch(allMovies);
+      displayedMovies = [...allMovies]; // 초기 표시용
+      renderNextBatch(displayedMovies);
     });
 
   filterBtn.addEventListener("click", () => {
     const keyword = searchInput.value.trim().toLowerCase();
     const selectedSortInput = document.querySelector('input[name="sort"]:checked');
 
-    let filtered = allMovies.filter(movie =>
+    displayedMovies = allMovies.filter(movie =>
       movie.title.toLowerCase().includes(keyword)
     );
 
     if (selectedSortInput) {
       const selectedSort = selectedSortInput.value;
-      filtered = sortMovies(filtered, selectedSort);
+      displayedMovies = sortMovies(displayedMovies, selectedSort);
     }
 
     movieGrid.innerHTML = "";
     renderedCount = 0;
-    allMovies = filtered;
-    renderNextBatch(allMovies);
+    renderNextBatch(displayedMovies);
   });
 
   document.querySelectorAll('input[name="sort"]').forEach(input => {
     input.addEventListener("change", () => {
       const keyword = searchInput.value.trim().toLowerCase();
-      const filtered = allMovies.filter(movie =>
+
+      displayedMovies = allMovies.filter(movie =>
         movie.title.toLowerCase().includes(keyword)
       );
-      const sorted = sortMovies(filtered, input.value);
+
+      displayedMovies = sortMovies(displayedMovies, input.value);
+
       movieGrid.innerHTML = "";
       renderedCount = 0;
-      allMovies = sorted;
-      renderNextBatch(allMovies);
+      renderNextBatch(displayedMovies);
     });
   });
 
