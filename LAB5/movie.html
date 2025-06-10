@@ -1,0 +1,105 @@
+<!-- movie.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>영화 상세 정보</title>
+    <link rel = "stylesheet" type = "text/css" href = "main.css">
+</head>
+<body>
+  
+  <div id="wrap">
+    <header class="header">
+      <div class="header-txt">인프밍 영화 정보 사이트입니다.</div>
+      <nav class="nav">
+        <a href="index.html" class = "active">메인페이지</a>
+        <a href="login.html">로그인</a>
+        <a href="signup.html">회원가입</a>
+      </nav>
+    </header>
+
+    <main class="main">
+      <div class="article-txt">영화 상세 정보</div>
+      <div id="movie-detail"></div>
+    </main>
+
+  <div id="comments">
+    <h3>📝 영화 후기</h3>
+    <div id="comment-list"></div>
+
+    <form id="comment-form">
+      <textarea id="comment-input" placeholder="후기를 작성하세요"></textarea>
+      <br />
+      <button type="submit">등록하기!</button>
+    </form>
+    </div>
+  </div>
+
+  <script>
+    const detailContainer = document.getElementById("movie-detail");
+    const params = new URLSearchParams(window.location.search);
+    const movieId = params.get("movie_id");
+
+    fetch(`/api/movies/${movieId}`)
+      .then(res => res.json())
+      .then(movie => {
+        detailContainer.innerHTML = `
+          <div id="movie-detail">
+            <img id="poster" src="${movie.movie_image}" alt="${movie.movie_title}" />
+            <div id="movie-info-text">
+              <p><strong>영화 id: <span id="movie-id">${movie.movie_id}</span></strong></p>
+              <h2><strong>🎬 영화 제목</strong> <span id="title">${movie.movie_title}</span></h2>
+              <p><strong>📅 개봉일:</strong> <span id="release">${movie.movie_release_date}</span></p>
+              <p><strong>⭐ 평점:</strong> <span id="rate">${movie.movie_rate}</span></p>
+              <p><strong>📁 줄거리:</strong> <span id="overview">${movie.movie_overview}</span></p>
+            </div>
+          </div>
+        `;
+      })
+      .catch(err => {
+        detailContainer.innerHTML = "<p>영화 정보를 불러오는 데 실패했습니다.</p>";
+        console.error(err);
+      });
+
+
+            // 댓글 불러오기
+    function loadComments() {
+      fetch(`/api/comments/${movieId}`)
+        .then(res => res.json())
+        .then(comments => {
+          const commentList = document.getElementById("comment-list");
+          commentList.innerHTML = "";
+          comments.forEach(c => {
+            const div = document.createElement("div");
+            div.className = "comment";
+            div.textContent = c;
+            commentList.appendChild(div);
+          });
+        });
+    }
+
+    // 댓글 작성
+    document.getElementById("comment-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const input = document.getElementById("comment-input");
+      const text = input.value.trim();
+      if (!text) return;
+
+      fetch(`/api/comments/${movieId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ comment: text })
+      })
+        .then(res => res.json())
+        .then(() => {
+          input.value = "";
+          loadComments(); // 새로고침 없이 댓글 목록 업데이트
+        });
+    });
+
+    loadComments(); // 처음 페이지 로드 시 댓글 불러오기
+    </script>
+
+</body>
+</html>

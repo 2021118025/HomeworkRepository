@@ -1,0 +1,346 @@
+@charset "UTF-8";
+
+/* index.html */
+/* header */
+#wrap {
+    width: 1020px;
+    margin: 0 auto;
+}
+.header {
+    overflow: hidden;
+    border-bottom: 2px solid black;
+    padding-bottom: 10px;
+}
+.header-txt {
+    padding: 10px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    animation-name: slide-header;
+    animation-duration: 2s;
+    animation-timing-function: ease-out;
+    display: inline-block;
+}
+@keyframes slide-header{
+    0% { transform: translateX(1020px); }
+    100% { transform: translateX(0px); }
+}
+/* nav */
+.nav {
+    padding: 10px;
+    display: flex;
+    flex-direction: row; /* nav a: horizontal */
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 20px;
+}
+.nav a {
+    text-decoration: none;
+    font-size: 15px;
+    color: black;
+    margin: 0 10px;
+    padding: 5px 0;
+}
+.nav a.active {
+    border-top: 2px solid red;
+    border-bottom: 2px solid red;
+}
+
+/* main */
+.main {
+    display: flex;
+    flex-direction: column; /* Movies & About: vertical*/
+}
+.article-txt {
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    border-bottom: 1px solid black;
+    padding: 10px;
+    margin-top: 15px;
+}
+
+/* media
+@media(min-width: 481px) and (max-width: 800px) {
+    .nav { flex-direction: column;  align-items: center; }
+    .article-txt {text-align: center; }
+    .container-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; }
+    .container {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 45%;
+        flex-direction: row; }
+}
+@media(max-width: 480px) {
+    .header{ text-align: center; }
+    .article-txt {text-align: center; }
+    .nav { flex-direction: column; align-items: center; }
+    .container-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;}
+    .container {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 65%;
+        flex-direction: column; }
+} */
+
+/* Filtering (Search) */
+div #filtering{
+    justify-content: center;
+
+}
+#filtering {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+#search {
+    margin-left: 20px;
+    width: 850px;
+    padding: 7px;
+    font-size: 14px;
+}
+#btn {
+    padding: 7px 14px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Movie Sorting */
+.sort-panel {
+  width: 200px;
+  height: 230px;
+  background-color: #f0f0f0;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  padding: 15px;
+}
+.sort-panel strong {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 15px;
+}
+.sort-panel label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Movie Layout */
+.movie-section {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-top: 20px;
+}
+.movie-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+}
+.movie-card {
+    width: 350px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.movie-card img {
+    width: 100%;
+    height: auto;
+}
+.movie-title {
+    margin-top: 10px;
+    font-weight: bold;
+}
+.movie-date {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Movie Summary hover */
+.poster-wrap {
+  position: relative;
+  width: 100%;
+}
+.poster-wrap img {
+  display: block;
+  width: 100%;
+}
+.poster-wrap .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  font-size: 14px;
+  line-height: 2;
+  padding: 20px 25px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+.poster-wrap:hover .overlay {
+  opacity: 1;
+}
+
+
+/* login, signup */
+h1 {
+    font-family:Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    text-align: center;
+}
+main {
+    margin-top: 30px;
+}
+.form-box {
+    margin: 0 auto;
+    border: 2px solid #000000;
+    padding: 30px;
+    width: 400px;
+}
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.form-row label {
+    width: 100px;
+    font-weight: bold;
+    text-align: left;
+}
+.form-row input, .form-row select {
+    flex: 1;
+    height: 30px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+.radio-group {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    gap: 10px;
+}
+.radio-space{
+    width: 60px;
+}
+#button {
+    display: flex;
+    margin-top: 20px;
+    gap: 20px;
+}
+.submit input, .cancel input {
+    text-align: center;
+    padding: 10px;
+    width: 80px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+.submit input{
+    background-color: #21bd4b;
+    color: #2e2e2e;
+}
+.cancel input {
+    background-color: #ff0000;
+    color: #ffffff;
+}
+
+
+/* movie.html */
+#movie-detail {
+  display: flex;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  gap: 20px;
+  align-items: flex-start;
+  padding-top: 0;
+  margin-top: 30px;
+}
+
+#movie-detail img {
+  width: 180px;
+  border-radius: 6px;
+}
+#movie-info-text {
+  flex: 1;
+}
+
+#movie-info-text p {
+  margin: 6px 0;
+  font-size: 16px;
+  line-height: 1.4;
+
+}
+
+#movie-detail-content {
+  flex: 1;
+}
+
+#movie-detail-content h2 {
+  margin: 0;
+}
+
+#movie-detail-content p {
+  margin: 10px 0;
+}
+
+/* 댓글 영역 */
+#comments {
+  margin-top: 40px;
+width: 100%;
+}
+
+#comments h3 {
+  margin-bottom: 15px;
+}
+
+#comment-list .comment {
+  background: #f1f1f1;
+  padding: 12px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+/* 댓글 입력 */
+#comment-form {
+  margin-top: 15px;
+}
+
+#comment-form textarea {
+  width: 100%;
+  height: 60px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
+#comment-form button {
+  margin-top: 8px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#comment-form button:hover {
+  background-color: #0056b3;
+}

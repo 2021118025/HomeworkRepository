@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang = "ko">
+<head>
+    <meta charset = "UTF-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+    <title>메인페이지</title>
+    <link rel = "stylesheet" type = "text/css" href = "main.css">
+</head>
+
+<body>
+  <div id = "wrap">
+    <header class = "header">
+      <div class = "header-txt">인프밍 영화 정보 사이트입니다.</div>
+      <nav class = "nav">
+        <a href = "index.html" class = "active">메인페이지</a>
+        <a href = "login.html">로그인</a>
+        <a href = "signup.html">회원가입</a>
+      </nav>
+    </header>
+
+    <main class = "main">
+      <div id = "filtering">
+        <input type = "text" id = "search" placeholder = "키워드를 입력하세요" />
+        <button id = "btn">Filter results</button>
+      </div>
+
+      <div class = "article-txt">Movies</div>
+
+      <section class = "movie-section">
+        
+        <div class = "sort-panel">
+          <div><strong>정렬 기준</strong></div>
+          <label><input type = "radio" name = "sort" value = "rating-desc"> 평점 내림차순</label><br>
+          <label><input type = "radio" name = "sort" value = "rating-asc"> 평점 오름차순</label><br>
+          <label><input type = "radio" name = "sort" value = "date-desc"> 개봉 내림차순</label><br>
+          <label><input type = "radio" name = "sort" value = "date-asc"> 개봉 오름차순</label>
+        </div>
+
+        <div class = "movie-grid" id = "movie-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+const movieGrid = document.getElementById("movie-grid");
+const searchInput = document.getElementById("search");
+const filterBtn = document.getElementById("btn");
+
+let displayedMovies = [];
+let renderedCount = 0;
+const batchSize = 8;
+
+// 영화 카드 렌더링
+function renderNextBatch(data) {
+  const nextBatch = data.slice(renderedCount, renderedCount + batchSize);
+  nextBatch.forEach(movie => {
+    const card = document.createElement("div");
+    card.className = "movie-card";
+    card.innerHTML = `
+      <div class="poster-wrap">
+        <img src="${movie.movie_image}" alt="${movie.movie_title}">
+        <div class="overlay"><strong>줄거리:</strong><br>${movie.movie_overview}</div>
+      </div>
+      <div class="movie-title">${movie.movie_title}</div>
+      <div class="movie-date">📅 ${movie.movie_release_date}</div>
+      <div class="movie-rating">⭐ ${movie.movie_rate}/10</div>
+    `;
+    card.addEventListener("click", () => {
+      window.location.href = `/movie.html?movie_id=${movie.movie_id}`;
+    });
+    movieGrid.appendChild(card);
+  });
+  renderedCount += batchSize;
+}
+
+// 무한 스크롤
+window.addEventListener("scroll", () => {
+  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
+    renderNextBatch(displayedMovies);
+  }
+});
+
+// 영화 불러오기 (검색 + 정렬 포함)
+function fetchAndRenderMovies() {
+  const keyword = searchInput.value.trim();
+  const selectedSort = document.querySelector('input[name="sort"]:checked')?.value || "";
+
+  const query = `/api/movies?keyword=${encodeURIComponent(keyword)}&sort=${selectedSort}`;
+  fetch(query)
+    .then(res => res.json())
+    .then(data => {
+      displayedMovies = data;
+      movieGrid.innerHTML = "";
+      renderedCount = 0;
+      renderNextBatch(displayedMovies);
+    });
+}
+
+// 검색 버튼 클릭 시
+filterBtn.addEventListener("click", fetchAndRenderMovies);
+
+// 정렬 버튼 클릭 시
+document.querySelectorAll('input[name="sort"]').forEach(input => {
+  input.addEventListener("change", fetchAndRenderMovies);
+});
+
+// 페이지 최초 로드 시 전체 영화 표시
+fetchAndRenderMovies();
+</script>
+
+
+</body>
+</html>
